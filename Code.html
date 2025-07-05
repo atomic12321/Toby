@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Toby Parade</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #111;
+    }
+
+    .toby {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      will-change: transform;
+      pointer-events: none;
+    }
+
+    @keyframes drive {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-200vw);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<script>
+  const NUM_CARS = 10;
+  const SPRITE_SRC = "toby-car.png"; // Make sure the file is named to match
+
+  function spawnToby() {
+    const img = document.createElement("img");
+    img.src = SPRITE_SRC;
+    img.classList.add("toby");
+
+    // Random vertical position (between 0% and 80%)
+    const top = Math.random() * 80;
+    img.style.top = `${top}vh`;
+
+    // Random scale between 0.5 and 1.2
+    const scale = 0.5 + Math.random() * 0.7;
+    img.style.width = `${100 * scale}px`;
+
+    // Animation duration
+    const duration = 5 + Math.random() * 5;
+    img.style.animation = `drive ${duration}s linear forwards`;
+
+    document.body.appendChild(img);
+
+    img.addEventListener("animationend", () => {
+      img.remove();
+      spawnToby(); // loop forever
+    });
+  }
+
+  // Start parade
+  for (let i = 0; i < NUM_CARS; i++) {
+    setTimeout(spawnToby, i * 500);
+  }
+</script>
+
+</body>
+</html>
