@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Toby Parade</title>
+  <title>Toby Parade (with Honk)</title>
   <style>
     body {
       margin: 0;
@@ -31,36 +31,39 @@
 </head>
 <body>
 
+<audio id="honk-sound" src="automobile-horn-153260.mp3" preload="auto"></audio>
+
 <script>
   const NUM_CARS = 10;
-  const SPRITE_SRC = "toby-car.png"; // Make sure the file is named to match
+  const SPRITE_SRC = "toby-car.png";
+  const honkSound = document.getElementById("honk-sound");
 
   function spawnToby() {
     const img = document.createElement("img");
     img.src = SPRITE_SRC;
     img.classList.add("toby");
 
-    // Random vertical position (between 0% and 80%)
     const top = Math.random() * 80;
     img.style.top = `${top}vh`;
 
-    // Random scale between 0.5 and 1.2
     const scale = 0.5 + Math.random() * 0.7;
     img.style.width = `${100 * scale}px`;
 
-    // Animation duration
     const duration = 5 + Math.random() * 5;
     img.style.animation = `drive ${duration}s linear forwards`;
 
     document.body.appendChild(img);
 
+    // Play honk (clone audio to allow overlapping)
+    const sound = honkSound.cloneNode();
+    sound.play();
+
     img.addEventListener("animationend", () => {
       img.remove();
-      spawnToby(); // loop forever
+      spawnToby();
     });
   }
 
-  // Start parade
   for (let i = 0; i < NUM_CARS; i++) {
     setTimeout(spawnToby, i * 500);
   }
