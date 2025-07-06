@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Toby Parade (with Honk)</title>
+  <title>about:blank</title>
   <style>
     body {
       margin: 0;
@@ -34,11 +34,13 @@
 <audio id="honk-sound" src="automobile-horn-153260.mp3" preload="auto"></audio>
 
 <script>
-  const NUM_CARS = 10;
   const SPRITE_SRC = "toby-car.png";
   const honkSound = document.getElementById("honk-sound");
+  let paradeActive = false;
 
   function spawnToby() {
+    if (!paradeActive) return;
+
     const img = document.createElement("img");
     img.src = SPRITE_SRC;
     img.classList.add("toby");
@@ -54,19 +56,31 @@
 
     document.body.appendChild(img);
 
-    // Play honk (clone audio to allow overlapping)
+    // Play honk (clone to allow overlaps)
     const sound = honkSound.cloneNode();
     sound.play();
 
     img.addEventListener("animationend", () => {
       img.remove();
-      spawnToby();
+      if (paradeActive) spawnToby();
     });
   }
 
-  for (let i = 0; i < NUM_CARS; i++) {
-    setTimeout(spawnToby, i * 500);
-  }
+  // Delay start for 10s
+  setTimeout(() => {
+    paradeActive = true;
+
+    // Start spawning initial 10 cars staggered
+    for (let i = 0; i < 10; i++) {
+      setTimeout(spawnToby, i * 500);
+    }
+
+    // Stop parade after 5 more seconds
+    setTimeout(() => {
+      paradeActive = false;
+    }, 5000);
+
+  }, 10000);
 </script>
 
 </body>
